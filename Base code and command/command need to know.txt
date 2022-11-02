@@ -1,0 +1,20 @@
+Convert from tensorflow model to ONNX
+python -m tf2onnx.convert --saved-model my_model --output temp.onnx
+
+Thay đổi các thông số khác trong mục deploy
+
+
+Convert the model from model.onnx to resnes_engine.trt:
+trtexec.exe --onnx=traffic_sign.onnx --saveEngine=traffic_sign.trt
+
+Build TensorRT engine from ONNX using trtexec tool
+trtexec --onnx=fcn-resnet101.onnx --fp16 --workspace=64 --minShapes=input:1x3x256x256 --optShapes=input:1x3x1026x1282 --maxShapes=input:1x3x1440x2560 --buildOnly --saveEngine=fcn-resnet101.engine
+
+
+test:
+resnet50_onnx_model.onnx
+
+trtexec --onnx=traffic_sign.onnx --fp16 --workspace=64 --minShapes=input:1x3x256x256 --optShapes=input:1x3x1026x1282 --maxShapes=input:1x3x1440x2560 --buildOnly --saveEngine=traffic_sign.engine
+
+python -m tf2onnx.convert --saved-model model.h5 --output traffic_sign_temp_model.onnx
+
